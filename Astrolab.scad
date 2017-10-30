@@ -92,14 +92,14 @@ module cutaway_cubes() {
 
 
 // Outer housing
-
+/*
 difference() {
     generate_spheric_parabola(outer_width * outer_width_ratio, outer_depth * outer_depth_ratio, outer_height);
     generate_spheric_parabola(outer_width * outer_width_ratio, inner_depth * outer_depth_ratio, inner_height);
 
     cutaway_cubes();
 }
-
+*/
 
 // AstroSwarm Text!
 module generate_3d_text() {
@@ -111,9 +111,9 @@ module generate_3d_text() {
             halign = "center"
         );
 }
-translate([outer_width/2, 0, 50])
-    rotate([90, 0, 90])
+translate([outer_width/2 - 1, 0, 50])
+    rotate([94, 0, 90])
         generate_3d_text();
-translate([-outer_width/2, 0, 50])
-    rotate([90, 0, 270])
+translate([-outer_width/2 + 1, 0, 50])
+    rotate([94, 0, 270])
         generate_3d_text();
