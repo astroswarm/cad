@@ -28,7 +28,7 @@ air_vent_cutoff_at_proportion = 0.86;
 
 outer_width_ratio = 2.27;
 outer_depth_ratio = 1.13;
-outer_cutout_degrees = 7;
+outer_cutout_degrees = 7.5;
 
 difference() {
     // Inner housing
@@ -92,14 +92,14 @@ module cutaway_cubes() {
 
 
 // Outer housing
-/*
+
 difference() {
     generate_spheric_parabola(outer_width * outer_width_ratio, outer_depth * outer_depth_ratio, outer_height);
     generate_spheric_parabola(outer_width * outer_width_ratio, inner_depth * outer_depth_ratio, inner_height);
 
     cutaway_cubes();
 }
-*/
+
 
 // AstroSwarm Text!
 module generate_3d_text() {
