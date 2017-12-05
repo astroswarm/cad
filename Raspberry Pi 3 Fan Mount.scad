@@ -5,7 +5,7 @@ $fn = 30;
 bracket_depth = 1;
 
 board_width = 56.0;
-board_clearance = 6.0;
+board_clearance = 14.0;
 board_depth = 1.25;
 
 board_hole_spacing = 48.0;
@@ -18,7 +18,13 @@ board_leg_latch_overlap = 0.75;
 fan_hole_spacing = 24.0;
 fan_hole_diameter_top = 3.0;
 fan_hole_diameter_bottom = 4.5;
-fan_depth = 7.5;
+fan_depth = 7;
+fan_leg_latch_depth = 1.0;
+fan_leg_latch_overlap = 0.75;
+
+fan_mount_angle = 25;
+fan_mount_y_offset = 8.8;
+fan_mount_z_offset = 7.9;
 
 module generic_leg_latch(hole_diameter, hole_length, vertical_overlap, horizontal_overlap) {
     // Leg
@@ -48,9 +54,12 @@ module generic_leg_latch(hole_diameter, hole_length, vertical_overlap, horizonta
             translate([-horizontal_overlap / 2, -hole_diameter / 2, -hole_diameter / 2])
                 cube([horizontal_overlap, hole_diameter, 2 * vertical_overlap + hole_diameter / 2]);
         }
+    
+    // Connector
+    translate([0, 0, hole_length + hole_diameter])
+        color("green")
+            sphere(d = hole_diameter);
 }
-
-generic_leg_latch(hole_diameter = 3, hole_length = 5, vertical_overlap = 2, horizontal_overlap = 1);
 
 module bracket() {
     translate([(board_width - board_hole_spacing) / 2, 0, board_clearance + board_depth + board_leg_latch_depth + board_hole_diameter / 2])
@@ -78,7 +87,16 @@ module board_latch() {
     );
 }
 
-module latches() {
+module fan_latch() {
+    generic_leg_latch(
+        hole_diameter = fan_hole_diameter_top,
+        hole_length = fan_depth,
+        vertical_overlap = fan_leg_latch_depth,
+        horizontal_overlap = fan_leg_latch_overlap
+    );
+}
+
+module board_latches() {
     translate([(board_width - board_hole_spacing) / 2, board_leg_overlap / 2, 0])
         board_latch();
 
@@ -86,8 +104,24 @@ module latches() {
         board_latch();
 }
 
+module fan_latches() {
+     translate([0, fan_mount_y_offset, fan_mount_z_offset]) {
+        rotate([fan_mount_angle, 0, 0]) {
+            union() {
+                translate([(board_width - fan_hole_spacing) / 2, 0, 0])
+                    fan_latch();
+                translate([board_width - (board_width - fan_hole_spacing) / 2, 0, 0])
+                    fan_latch();
+            }
+        }
+
+    }
+    
+}
+
 
 bracket();
 board_legs();
+board_latches();
 
-latches();
+fan_latches();
