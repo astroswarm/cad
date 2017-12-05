@@ -11,7 +11,7 @@ hole_diameter = 2.5;
 
 leg_overlap = 6.0;
 leg_latch_depth = 1.0;
-leg_latch_overlap = 1.0;
+leg_latch_overlap = 0.75;
 
 module bracket() {
     translate([0, 0, board_clearance + board_depth + leg_latch_depth])
@@ -24,11 +24,20 @@ module leg() {
 
 module legs() {
     
-translate([(board_width - hole_spacing) / 2, leg_overlap / 2, board_depth + leg_latch_depth])
-    leg();
+    translate([(board_width - hole_spacing) / 2, leg_overlap / 2, board_depth + leg_latch_depth])
+        leg();
 
-translate([board_width - (board_width - hole_spacing) / 2, leg_overlap / 2, board_depth + leg_latch_depth])
-    leg();
+    translate([board_width - (board_width - hole_spacing) / 2, leg_overlap / 2, board_depth + leg_latch_depth])
+        leg();
+}
+
+module latch_endcap() {
+    difference() {
+        sphere(d = hole_diameter);
+        
+//        translate([-hole_diameter / 2, -hole_diameter / 2, -hole_diameter])
+//            cube(hole_diameter, hole_diameter, hole_diameter);
+    }
 }
 
 module latch() {
@@ -36,13 +45,13 @@ module latch() {
         union() {
             cylinder(h = board_depth + leg_latch_depth, d = hole_diameter);
             translate([leg_latch_overlap / 2, 0, 0])
-                cylinder(h = leg_latch_depth, d = hole_diameter);
+                latch_endcap();
             translate([-leg_latch_overlap / 2, 0, 0])
-                cylinder(h = leg_latch_depth, d = hole_diameter);
+                latch_endcap();
         }
         
-        translate([-leg_latch_overlap / 2, -hole_diameter / 2, 0])
-            cube([leg_latch_overlap, hole_diameter, leg_latch_overlap + board_depth]);
+        translate([-leg_latch_overlap / 2, -hole_diameter / 2, -hole_diameter / 2])
+            cube([leg_latch_overlap, hole_diameter, leg_latch_depth + board_depth + hole_diameter / 2]);
     }
 }
 
