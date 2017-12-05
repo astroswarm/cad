@@ -8,7 +8,7 @@ board_width = 56.0;
 board_clearance = 14.0;
 board_depth = 1.25;
 
-board_hole_spacing = 48.0;
+board_hole_spacing = 49.0;
 board_hole_diameter = 2.5;
 
 board_leg_overlap = 6.0;
@@ -119,9 +119,19 @@ module fan_latches() {
     
 }
 
+module build() {
+    union() {
+        bracket();
+        board_legs();
+        board_latches();
+        fan_latches();
+    }
+}
 
-bracket();
-board_legs();
-board_latches();
+module build_for_printing() {        
+    translate([0, 0, board_clearance + board_leg_latch_depth + board_hole_diameter + bracket_depth])
+        rotate([180, 0, 0])
+            build();
+}
 
-fan_latches();
+build_for_printing();
