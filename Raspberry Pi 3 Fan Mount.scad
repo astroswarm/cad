@@ -16,15 +16,15 @@ board_leg_latch_depth = 1.0;
 board_leg_latch_overlap = 0.75;
 
 fan_hole_spacing = 24.0;
-fan_hole_diameter_top = 3.0;
+fan_hole_diameter_top = 3.1;
 fan_hole_diameter_bottom = 4.5;
 fan_depth = 7;
 fan_leg_latch_depth = 1.0;
 fan_leg_latch_overlap = 0.75;
 
 fan_mount_angle = 25;
-fan_mount_y_offset = 8.8;
-fan_mount_z_offset = 7.9;
+fan_mount_y_offset = 8.6;
+fan_mount_z_offset = 8.2;
 
 module generic_leg_latch(hole_diameter, hole_length, vertical_overlap, horizontal_overlap) {
     // Leg
@@ -56,7 +56,7 @@ module generic_leg_latch(hole_diameter, hole_length, vertical_overlap, horizonta
         }
     
     // Connector
-    translate([0, 0, hole_length + hole_diameter])
+    translate([0, 0, hole_length + hole_diameter / 2 + vertical_overlap])
         color("green")
             sphere(d = hole_diameter);
 }
