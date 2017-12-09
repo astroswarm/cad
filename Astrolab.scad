@@ -14,21 +14,25 @@ air_vent_width = 6;
 air_vent_spacing = 4;
 air_vent_cutoff_at_proportion = 0.86;
 
+air_vent_side_padding_on_face = 14;
+air_vent_height_crop_factor_on_face = 0.88;
+
 outer_width_ratio = 2.27;
 outer_depth_ratio = 1.13;
 outer_cutout_degrees = 7.5;
 
 text_height_offset = 50;
+face_airvent_height_offset = text_height_offset + 20;
 
 module generate_spheric_parabola(width, depth, height) {
     intersection() {
         scale([width, depth/2, height])
-        sphere(r = 1, center = true);
+            sphere(r = 1, center = true);
         
         translate([-width/2,-depth/2, 0])
-        cube(
-            size = [width, depth, height]
-        );
+            cube(
+                size = [width, depth, height]
+            );
     }
 }
 
@@ -79,17 +83,17 @@ module inner_housing() {
     
     module vertical_face_air_vent() {
         curve_radius = air_vent_width / 2;
-        translate([0, 0, text_height_offset - 4 * curve_radius]) {
+        translate([0, 0, face_airvent_height_offset - 4 * curve_radius]) {
             // Vertical portion
             cube(
-                size = [outer_width, air_vent_width, inner_height * air_vent_cutoff_at_proportion - text_height_offset]
+                size = [outer_width, air_vent_width, inner_height * air_vent_cutoff_at_proportion - face_airvent_height_offset]
             );
             translate([0, curve_radius, 0]) {
                 // Rounded bottom
                 rotate([0, 90, 0])
                     cylinder(h = outer_width, r = curve_radius);
                 // Rounded top
-                translate([0, 0, inner_height * air_vent_cutoff_at_proportion - text_height_offset])
+                translate([0, 0, inner_height * air_vent_cutoff_at_proportion - face_airvent_height_offset])
                     rotate([0, 90, 0])
                         cylinder(h = outer_width, r = curve_radius);
             }
@@ -100,10 +104,10 @@ module inner_housing() {
     module shell_face_air_vents() {
         // Create each side air vent
         iteration_depth = air_vent_width + air_vent_spacing;
-        num_vents = floor(inner_depth / iteration_depth);
-        total_padding = inner_depth - (num_vents * iteration_depth) + air_vent_spacing; // There are n-1 spacings for n vents
+        num_vents = floor((inner_depth - air_vent_side_padding_on_face * 2) / iteration_depth);
+        total_padding = inner_depth - (num_vents * iteration_depth) + air_vent_spacing - 2 * air_vent_side_padding_on_face; // There are n-1 spacings for n vents
         
-        for (i = [-inner_depth / 2:iteration_depth:inner_depth / 2 - iteration_depth]) {
+        for (i = [-inner_depth / 2 + air_vent_side_padding_on_face:iteration_depth:inner_depth / 2 - iteration_depth - air_vent_side_padding_on_face]) {
             translate([0, total_padding / 2, 0]) {
                 translate([-outer_width / 2, i, inner_case_ground_clearance + air_vent_lower_clearance]) {
                         vertical_face_air_vent();
@@ -117,8 +121,13 @@ module inner_housing() {
         
         shell_bottom_rounded_cutout();
         shell_side_air_vents();
-        shell_face_air_vents();
+        
+        intersection() {
+            shell_face_air_vents();
+            generate_spheric_parabola(outer_width * 1.1, outer_depth * 1.1, outer_height * air_vent_height_crop_factor_on_face);
+        }
     }
+            
 }
 
 
@@ -164,5 +173,5 @@ module branding() {
 
 
 inner_housing();
-//outer_housing();
+    outer_housing();
 branding();
