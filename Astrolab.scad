@@ -43,41 +43,31 @@ module inner_housing() {
             sphere(r = 1, center = true);
     }
     
+    module vertical_side_air_vent() {
+        curve_radius = air_vent_width / 2;
+        // Vertical portion
+        cube(
+            size = [air_vent_width, outer_depth, inner_height * air_vent_cutoff_at_proportion - inner_case_ground_clearance - air_vent_lower_clearance]
+        );
+        // Rounded top
+        translate([curve_radius, 0, 0]) {
+            rotate([-90, 0, 0])
+                cylinder(h = outer_depth, r = curve_radius);
+            // Rounded bottom
+            translate([0, 0, inner_height * air_vent_cutoff_at_proportion - inner_case_ground_clearance - air_vent_lower_clearance])
+                rotate([-90, 0, 0])
+                    cylinder(h = outer_depth, r = curve_radius);
+        }
+    }
+    
     difference() {
         shell_body();
         
         shell_bottom_rounded_cutout();
-                    
-        
-        // Side air vents on inner housing
-        curve_radius = air_vent_width / 2;
-        for(i = [0:air_vent_width + air_vent_spacing:inner_width / 2]) {
-            // Vertical portion of vents
-            translate([-inner_width / 2 + i, -outer_depth / 2, inner_case_ground_clearance + air_vent_lower_clearance]) {
-                cube(
-                    size = [air_vent_width, outer_depth, inner_height * air_vent_cutoff_at_proportion - inner_case_ground_clearance - air_vent_lower_clearance]
-                );
-            }
-            translate([inner_width / 2 - i - air_vent_width, -outer_depth/2, inner_case_ground_clearance + air_vent_lower_clearance]) {
-                cube(
-                    size = [air_vent_width, outer_depth, inner_height * air_vent_cutoff_at_proportion - inner_case_ground_clearance - air_vent_lower_clearance]
-                );
-            }
-            
-            // Rounded tops and bottoms of vertical vents
-            translate([-inner_width / 2 + curve_radius + i, outer_depth / 2, inner_case_ground_clearance + air_vent_lower_clearance]) {
-                rotate([90, 0, 0])
-                    cylinder(h = outer_depth, r = curve_radius);
-                translate([0, 0, inner_height * air_vent_cutoff_at_proportion - inner_case_ground_clearance - air_vent_lower_clearance])
-                    rotate([90, 0, 0])
-                        cylinder(h = outer_depth, r = curve_radius);
-            }
-            translate([inner_width / 2 - curve_radius - i, outer_depth / 2, inner_case_ground_clearance + air_vent_lower_clearance]) {
-                rotate([90, 0, 0])
-                    cylinder(h = outer_depth, r = curve_radius);
-                translate([0, 0, inner_height * air_vent_cutoff_at_proportion - inner_case_ground_clearance - air_vent_lower_clearance])
-                    rotate([90, 0, 0])
-                        cylinder(h = outer_depth, r = curve_radius);
+        // Create each side air vent
+        for(i = [-inner_width / 2:air_vent_width + air_vent_spacing:inner_width / 2]) {
+            translate([i, -outer_depth / 2, inner_case_ground_clearance + air_vent_lower_clearance]) {
+                vertical_side_air_vent();
             }
         }
     }
