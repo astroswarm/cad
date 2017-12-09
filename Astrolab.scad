@@ -18,6 +18,8 @@ outer_width_ratio = 2.27;
 outer_depth_ratio = 1.13;
 outer_cutout_degrees = 7.5;
 
+text_height_offset = 50;
+
 module generate_spheric_parabola(width, depth, height) {
     intersection() {
         scale([width, depth/2, height])
@@ -64,7 +66,7 @@ module inner_housing() {
         // Create each side air vent
         iteration_width = air_vent_width + air_vent_spacing;
         num_vents = floor(inner_width / iteration_width);
-        total_padding = inner_width - (num_vents * iteration_width) + air_vent_spacing; // THere are n-1 spacings for n vents
+        total_padding = inner_width - (num_vents * iteration_width) + air_vent_spacing; // There are n-1 spacings for n vents
         
         for (i = [-inner_width / 2:iteration_width:inner_width / 2 - iteration_width]) {
             translate([total_padding / 2, 0, 0]) {
@@ -75,11 +77,47 @@ module inner_housing() {
         }
     }
     
+    module vertical_face_air_vent() {
+        curve_radius = air_vent_width / 2;
+        translate([0, 0, text_height_offset - 4 * curve_radius]) {
+            // Vertical portion
+            cube(
+                size = [outer_width, air_vent_width, inner_height * air_vent_cutoff_at_proportion - text_height_offset]
+            );
+            translate([0, curve_radius, 0]) {
+                // Rounded bottom
+                rotate([0, 90, 0])
+                    cylinder(h = outer_width, r = curve_radius);
+                // Rounded top
+                translate([0, 0, inner_height * air_vent_cutoff_at_proportion - text_height_offset])
+                    rotate([0, 90, 0])
+                        cylinder(h = outer_width, r = curve_radius);
+            }
+        }
+        
+    }
+    
+    module shell_face_air_vents() {
+        // Create each side air vent
+        iteration_depth = air_vent_width + air_vent_spacing;
+        num_vents = floor(inner_depth / iteration_depth);
+        total_padding = inner_depth - (num_vents * iteration_depth) + air_vent_spacing; // There are n-1 spacings for n vents
+        
+        for (i = [-inner_depth / 2:iteration_depth:inner_depth / 2 - iteration_depth]) {
+            translate([0, total_padding / 2, 0]) {
+                translate([-outer_width / 2, i, inner_case_ground_clearance + air_vent_lower_clearance]) {
+                        vertical_face_air_vent();
+                }
+            }
+        }
+    }
+    
     difference() {
         shell_body();
         
         shell_bottom_rounded_cutout();
         shell_side_air_vents();
+        shell_face_air_vents();
     }
 }
 
@@ -116,15 +154,15 @@ module branding() {
                 halign = "center"
             );
     }
-    translate([outer_width/2 - 1, 0, 50])
+    translate([outer_width/2 - 1, 0, text_height_offset])
         rotate([94, 0, 90])
             generate_3d_text();
-    translate([-outer_width/2 + 1, 0, 50])
+    translate([-outer_width/2 + 1, 0, text_height_offset])
         rotate([94, 0, 270])
             generate_3d_text();
 }
 
 
 inner_housing();
-outer_housing();
+//outer_housing();
 branding();
