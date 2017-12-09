@@ -49,8 +49,8 @@ module inner_housing() {
         cube(
             size = [air_vent_width, outer_depth, inner_height * air_vent_cutoff_at_proportion - inner_case_ground_clearance - air_vent_lower_clearance]
         );
-        // Rounded top
         translate([curve_radius, 0, 0]) {
+            // Rounded top
             rotate([-90, 0, 0])
                 cylinder(h = outer_depth, r = curve_radius);
             // Rounded bottom
@@ -60,16 +60,26 @@ module inner_housing() {
         }
     }
     
+    module shell_side_air_vents() {
+        // Create each side air vent
+        iteration_width = air_vent_width + air_vent_spacing;
+        num_vents = floor(inner_width / iteration_width);
+        total_padding = inner_width - (num_vents * iteration_width) + air_vent_spacing; // THere are n-1 spacings for n vents
+        
+        for (i = [-inner_width / 2:iteration_width:inner_width / 2 - iteration_width]) {
+            translate([total_padding / 2, 0, 0]) {
+                translate([i, -outer_depth / 2, inner_case_ground_clearance + air_vent_lower_clearance]) {
+                    vertical_side_air_vent();
+                }
+            }
+        }
+    }
+    
     difference() {
         shell_body();
         
         shell_bottom_rounded_cutout();
-        // Create each side air vent
-        for(i = [-inner_width / 2:air_vent_width + air_vent_spacing:inner_width / 2]) {
-            translate([i, -outer_depth / 2, inner_case_ground_clearance + air_vent_lower_clearance]) {
-                vertical_side_air_vent();
-            }
-        }
+        shell_side_air_vents();
     }
 }
 
