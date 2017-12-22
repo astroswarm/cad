@@ -87,10 +87,11 @@ module inner_housing() {
     
     module vertical_face_air_vent() {
         curve_radius = face_air_vent_width / 2;
-        translate([-face_air_vent_hollow_thickness / 2, -curve_radius, face_airvent_height_offset - 4 * curve_radius]) {
+        height = inner_height * air_vent_cutoff_at_proportion - face_airvent_height_offset;
+        translate([-face_air_vent_hollow_thickness / 2, -curve_radius, -height / 2]) {
             // Vertical portion
             cube(
-                size = [face_air_vent_hollow_thickness, face_air_vent_width, inner_height * air_vent_cutoff_at_proportion - face_airvent_height_offset]
+                size = [face_air_vent_hollow_thickness, face_air_vent_width, height]
             );
             translate([0, curve_radius, 0]) {
                 // Rounded bottom
