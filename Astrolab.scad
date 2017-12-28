@@ -1,8 +1,8 @@
-$fn = 100;
+$fn = 50;
 
-inner_width = 40;
-inner_depth = 114;
-inner_height = 204;
+inner_width = 42;
+inner_depth = 130;
+inner_height = 205;
 
 width_thickness = 3;
 depth_thickness = 3;
@@ -12,7 +12,7 @@ outer_width = inner_width + 2 * width_thickness;
 outer_depth = inner_depth + 2 * depth_thickness;
 outer_height = inner_height + 2 * height_thickness;
 
-inner_case_ground_clearance = 35;
+inner_case_ground_clearance = 40;
 air_vent_lower_clearance = -25;
 
 side_air_vent_width = 6;
@@ -23,7 +23,7 @@ face_air_vent_angle = 60;
 face_air_vent_exposure_buffer_proportion = 0.9;
 face_air_vent_width = width_thickness * face_air_vent_exposure_buffer_proportion * (sin(face_air_vent_angle));
 face_air_vent_spacing = 5;
-face_air_vent_side_padding = 16;
+face_air_vent_side_padding = 18;
 face_air_vent_height_crop_factor = 0.82;
 face_air_vent_drop_angle = 60; // downward slope for water to drip out
 face_air_vent_hollow_thickness = depth_thickness * 4;
@@ -34,13 +34,16 @@ outer_cutout_diameter = 3 * outer_height;
 outer_cutout_vertical_offset = outer_height - 100;
 outer_cutout_horizontal_offset = outer_width / 2 + 10;
 
-text_height_offset = 50;
-face_airvent_height_offset = text_height_offset + 32;
+text_height_offset = 40;
+face_airvent_height_offset = text_height_offset + 22;
+
+branding_height = 13;
+branding_protrusion = 2;
 
 module generate_spheric_parabola(width, depth, height) {
     intersection() {
         scale([width, depth/2, height])
-            sphere(r = 1, center = true);
+            sphere(r = 1, center = true, $fn = 100);
         
         translate([-width/2,-depth/2, 0])
             cube(
@@ -59,7 +62,7 @@ module inner_housing() {
     
     module shell_bottom_rounded_cutout() {
         scale([inner_width, inner_depth / 2, inner_case_ground_clearance])
-            sphere(r = 1, center = true);
+            sphere(r = 1, center = true, $fn = 60);
     }
     
     module vertical_side_air_vent() {
@@ -69,10 +72,10 @@ module inner_housing() {
             size = [side_air_vent_width, outer_depth, inner_height * air_vent_cutoff_at_proportion - inner_case_ground_clearance - air_vent_lower_clearance]
         );
         translate([curve_radius, 0, 0]) {
-            // Rounded top
+            // Rounded bottom
             rotate([-90, 0, 0])
                 cylinder(h = outer_depth, r = curve_radius);
-            // Rounded bottom
+            // Rounded top
             translate([0, 0, inner_height * air_vent_cutoff_at_proportion - inner_case_ground_clearance - air_vent_lower_clearance])
                 rotate([-90, 0, 0])
                     cylinder(h = outer_depth, r = curve_radius);
@@ -164,7 +167,8 @@ module outer_housing() {
             rotate([90, 0, 0]) {
                 cylinder(
                     h = cylinder_length,
-                    d = outer_cutout_diameter
+                    d = outer_cutout_diameter,
+                    $fn = 200
                 );
                 translate([-outer_cutout_diameter / 2, 0, 0])
                     cube([outer_cutout_diameter, outer_cutout_diameter, cylinder_length]);
@@ -174,7 +178,8 @@ module outer_housing() {
             rotate([90, 0, 0]) {
                 cylinder(
                     h = cylinder_length,
-                    d = outer_cutout_diameter
+                    d = outer_cutout_diameter,
+                    $fn = 200
                 );
                 translate([-outer_cutout_diameter / 2, 0, 0])
                     cube([outer_cutout_diameter, outer_cutout_diameter, cylinder_length]);
@@ -192,19 +197,21 @@ module outer_housing() {
 
 module branding() {
     module generate_3d_text() {
-        linear_extrude(height = 1)
+        linear_extrude(height = branding_protrusion)
             text(
                 font = "Arial Rounded MT Bold",
                 text = "Astrolab",
-                size = 13,
+                size = branding_height,
                 halign = "center"
             );
     }
-    translate([outer_width/2 - 1, 0, text_height_offset])
-        rotate([94, 0, 90])
+    branding_angle = atan(branding_protrusion / branding_height) + 90;
+
+    translate([outer_width/2 - branding_protrusion * sin(branding_angle), 0, text_height_offset])
+        rotate([branding_angle, 0, 90])
             generate_3d_text();
-    translate([-outer_width/2 + 1, 0, text_height_offset])
-        rotate([94, 0, 270])
+    translate([-outer_width/2 + branding_protrusion * sin(branding_angle), 0, text_height_offset])
+        rotate([branding_angle, 0, 270])
             generate_3d_text();
 }
 
@@ -219,14 +226,14 @@ branding();
 pi_drop_angle = 10;
 pi_clip_thickness = 1;
 pi_clip_width = 3;
-pi_clip_length = 15 + pi_clip_thickness / tan(pi_drop_angle);
+pi_clip_length = 10 + pi_clip_thickness / tan(pi_drop_angle);
 clip_positions = [0, 20, 38, 51 + pi_clip_width];
 
 pi_reserved_width = 89;
 pi_reserved_depth = 20;
-pi_reserved_height = 88;
+pi_reserved_height = 88 + 10;
 
-pi_vertical_offset = inner_case_ground_clearance;
+pi_vertical_offset = inner_case_ground_clearance - pi_clip_thickness / tan(pi_drop_angle) + 1;
 pi_horizontal_offset = 12;
 
 module mock_pi() {
@@ -257,7 +264,7 @@ module pi_clips() {
         
         translate([-inner_width / 2, -pi_reserved_width / 2,  pi_clip_thickness / tan(pi_drop_angle)])
             rotate([0, pi_drop_angle, 0]) {
-                mock_pi(); // Uncomment to see spatial footprint for a Raspberry pi
+                //mock_pi(); // Uncomment to see spatial footprint for a Raspberry pi
             }
     }
 }
