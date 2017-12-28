@@ -112,12 +112,15 @@ module inner_housing() {
         num_vents = floor((inner_depth - face_air_vent_side_padding * 2) / iteration_depth);
         total_padding = inner_depth - (num_vents * iteration_depth) + face_air_vent_spacing - 2 * face_air_vent_side_padding; // There are n-1 spacings for n vents
         
+        vent_width = face_air_vent_width + tan(face_air_vent_angle) * face_air_vent_width;
+        width_thickness = (outer_width - inner_width) / 2;
         for (i = [-inner_depth / 2 + face_air_vent_side_padding:iteration_depth:inner_depth / 2 - iteration_depth - face_air_vent_side_padding]) {
-            translate([0, total_padding / 2, 0]) {
-                translate([-(inner_width + face_air_vent_width) / 2, i, inner_case_ground_clearance + air_vent_lower_clearance])
-                rotate([0, 0, -face_air_vent_angle])
-                    vertical_face_air_vent();
-                translate([(inner_width + face_air_vent_width) / 2, i, inner_case_ground_clearance + air_vent_lower_clearance])
+            translate([0, total_padding / 2, (inner_height * air_vent_cutoff_at_proportion)/2 + face_airvent_height_offset/2]) {
+                x_spacing = inner_width / 2 + width_thickness / 2;
+                translate([x_spacing, i + vent_width / 2, inner_case_ground_clearance + air_vent_lower_clearance])
+                    rotate([0, 0, -face_air_vent_angle])
+                        vertical_face_air_vent();
+                translate([-x_spacing, i + vent_width / 2, inner_case_ground_clearance + air_vent_lower_clearance])
                     rotate([0, 0, face_air_vent_angle])
                         vertical_face_air_vent();
             }
