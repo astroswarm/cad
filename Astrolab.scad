@@ -18,11 +18,12 @@ side_air_vent_spacing = 4;
 air_vent_cutoff_at_proportion = 0.86;
 
 face_air_vent_angle = 60;
-face_air_vent_exposure_buffer_proportion = 0.95;
+face_air_vent_exposure_buffer_proportion = 0.9;
 face_air_vent_width = width_thickness * face_air_vent_exposure_buffer_proportion * (sin(face_air_vent_angle));
 face_air_vent_spacing = 5;
 face_air_vent_side_padding = 16;
 face_air_vent_height_crop_factor = 0.82;
+face_air_vent_drop_angle = 60; // downward slope for water to drip out
 face_air_vent_hollow_thickness = depth_thickness * 4;
 
 outer_width_ratio = 2.27;
@@ -30,7 +31,7 @@ outer_depth_ratio = 1.13;
 outer_cutout_degrees = 7.5;
 
 text_height_offset = 50;
-face_airvent_height_offset = text_height_offset + 36;
+face_airvent_height_offset = text_height_offset + 32;
 
 module generate_spheric_parabola(width, depth, height) {
     intersection() {
@@ -99,8 +100,16 @@ module inner_housing() {
             );
             translate([0, curve_radius, 0]) {
                 // Rounded bottom
-                rotate([0, 90, 0])
-                    cylinder(h = face_air_vent_hollow_thickness, r = curve_radius);
+                rotate([0, 90 + face_air_vent_drop_angle, 0]) {
+                    cylinder(h = face_air_vent_hollow_thickness * 1/cos(face_air_vent_drop_angle), r = curve_radius);
+                    translate([0, face_air_vent_width / 2, 0])
+                        rotate([0, 0, 180])
+                            cube(size = [
+                                face_air_vent_hollow_thickness * sin(face_air_vent_drop_angle),
+                                face_air_vent_width,
+                                face_air_vent_hollow_thickness * 1/cos(face_air_vent_drop_angle)
+                            ]);
+                }
                 // Rounded top
                 translate([0, 0, inner_height * air_vent_cutoff_at_proportion - face_airvent_height_offset])
                     rotate([0, 90, 0])
@@ -124,12 +133,11 @@ module inner_housing() {
                     rotate([0, 0, -face_air_vent_angle])
                         vertical_face_air_vent();
                 translate([-x_spacing, i + vent_width / 2, inner_case_ground_clearance + air_vent_lower_clearance])
-                    rotate([0, 0, face_air_vent_angle])
+                    rotate([0, 0, 180 + face_air_vent_angle])
                         vertical_face_air_vent();
             }
         }
     }
-    
     difference() {
         shell_body();
         
