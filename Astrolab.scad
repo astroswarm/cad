@@ -1,14 +1,16 @@
 $fn = 30;
-outer_width = 40;
-outer_depth = 100;
-outer_height = 200;
 
-inner_width = 36;
-inner_depth = 94;
-inner_height = 194;
+inner_width = 40;
+inner_depth = 114;
+inner_height = 204;
 
-width_thickness = (outer_width - inner_width) / 2;
-depth_thickness = (outer_depth - inner_depth) / 2;
+width_thickness = 3;
+depth_thickness = 3;
+height_thickness = 3;
+
+outer_width = inner_width + 2 * width_thickness;
+outer_depth = inner_depth + 2 * depth_thickness;
+outer_height = inner_height + 2 * height_thickness;
 
 inner_case_ground_clearance = 35;
 air_vent_lower_clearance = -25;
@@ -196,3 +198,53 @@ module branding() {
 inner_housing();
 outer_housing();
 branding();
+
+///////////////////////////
+// Raspberry Pi Mounting //
+///////////////////////////
+pi_drop_angle = 10;
+pi_clip_thickness = 1;
+pi_clip_width = 3;
+pi_clip_length = 15 + pi_clip_thickness / tan(pi_drop_angle);
+clip_positions = [0, 20, 38, 51 + pi_clip_width];
+
+pi_reserved_width = 89;
+pi_reserved_depth = 20;
+pi_reserved_height = 88;
+
+pi_vertical_offset = inner_case_ground_clearance;
+pi_horizontal_offset = 12;
+
+module mock_pi() {
+    color("blue")
+    cube(size = [pi_reserved_depth, pi_reserved_width, pi_reserved_height], center = false);
+}
+
+module single_pi_clip() {
+    rotate([0, pi_drop_angle, 0]) {
+        cube(size = [pi_clip_thickness, pi_clip_width, pi_clip_length], center = false);
+        translate([pi_clip_thickness / 2, pi_clip_width, pi_clip_length])
+            rotate([90, 0, 0])
+                cylinder(h = pi_clip_width, d = pi_clip_thickness, center = false);
+    }
+}
+
+module pi_clips() {
+    translate([0, 0, pi_vertical_offset]) {
+        translate([-inner_width / 2 - pi_clip_thickness * cos(pi_drop_angle), pi_horizontal_offset, 0]) {
+            max_pos = max(clip_positions) + pi_clip_width;
+            min_pos = min(clip_positions);
+            x_offset = (max_pos - min_pos) / 2;
+            for (pos = clip_positions) {
+                translate([0, pos - x_offset, 0])
+                    single_pi_clip();
+            }
+        }
+        
+        translate([-inner_width / 2, -pi_reserved_width / 2,  pi_clip_thickness / tan(pi_drop_angle)])
+            rotate([0, pi_drop_angle, 0])
+                mock_pi(); // Uncomment to see spatial footprint for a Raspberry pi
+    }
+}
+
+pi_clips();
