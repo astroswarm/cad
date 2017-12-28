@@ -1,4 +1,4 @@
-$fn = 30;
+$fn = 100;
 
 inner_width = 40;
 inner_depth = 114;
@@ -30,7 +30,9 @@ face_air_vent_hollow_thickness = depth_thickness * 4;
 
 outer_width_ratio = 2.27;
 outer_depth_ratio = 1.13;
-outer_cutout_degrees = 7.5;
+outer_cutout_diameter = 3 * outer_height;
+outer_cutout_vertical_offset = outer_height - 100;
+outer_cutout_horizontal_offset = outer_width / 2 + 10;
 
 text_height_offset = 50;
 face_airvent_height_offset = text_height_offset + 32;
@@ -155,24 +157,36 @@ module inner_housing() {
 
 
 module outer_housing() {
-    module cutaway_cubes() {
-        translate([-outer_width * outer_width_ratio / 2, 0, 0])
-        translate([-outer_width * outer_width_ratio, -outer_depth * outer_depth_ratio / 2, 0])
-        rotate([0, outer_cutout_degrees, 0])
-            cube(size=[outer_width * outer_width_ratio, outer_depth * outer_depth_ratio, outer_height*1.5]);
-
-        rotate([0, 0, 180])
-        translate([-outer_width * outer_width_ratio / 2, 0, 0])
-        translate([-outer_width * outer_width_ratio, -outer_depth * outer_depth_ratio / 2, 0])
-        rotate([0, outer_cutout_degrees, 0])
-            cube(size=[outer_width * outer_width_ratio, outer_depth * outer_depth_ratio, outer_height * 1.5]);
+    module cutaway_cylinders() {
+        cylinder_length = max([outer_height, outer_width, outer_depth]);
+        
+        translate([(outer_cutout_diameter / 2) + outer_cutout_horizontal_offset, cylinder_length / 2, outer_cutout_vertical_offset])
+            rotate([90, 0, 0]) {
+                cylinder(
+                    h = cylinder_length,
+                    d = outer_cutout_diameter
+                );
+                translate([-outer_cutout_diameter / 2, 0, 0])
+                    cube([outer_cutout_diameter, outer_cutout_diameter, cylinder_length]);
+            }
+        
+        translate([-(outer_cutout_diameter / 2) - outer_cutout_horizontal_offset, cylinder_length / 2, outer_cutout_vertical_offset])
+            rotate([90, 0, 0]) {
+                cylinder(
+                    h = cylinder_length,
+                    d = outer_cutout_diameter
+                );
+                translate([-outer_cutout_diameter / 2, 0, 0])
+                    cube([outer_cutout_diameter, outer_cutout_diameter, cylinder_length]);
+            }
+            
     }
 
     difference() {
         generate_spheric_parabola(outer_width * outer_width_ratio, outer_depth * outer_depth_ratio, outer_height);
         generate_spheric_parabola(outer_width * outer_width_ratio, inner_depth * outer_depth_ratio, inner_height);
 
-        cutaway_cubes();
+        cutaway_cylinders();
     }
 }
 
@@ -242,8 +256,9 @@ module pi_clips() {
         }
         
         translate([-inner_width / 2, -pi_reserved_width / 2,  pi_clip_thickness / tan(pi_drop_angle)])
-            rotate([0, pi_drop_angle, 0])
+            rotate([0, pi_drop_angle, 0]) {
                 mock_pi(); // Uncomment to see spatial footprint for a Raspberry pi
+            }
     }
 }
 
