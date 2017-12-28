@@ -7,6 +7,9 @@ inner_width = 36;
 inner_depth = 94;
 inner_height = 194;
 
+width_thickness = (outer_width - inner_width) / 2;
+depth_thickness = (outer_depth - inner_depth) / 2;
+
 inner_case_ground_clearance = 35;
 air_vent_lower_clearance = -25;
 
@@ -14,12 +17,13 @@ side_air_vent_width = 6;
 side_air_vent_spacing = 4;
 air_vent_cutoff_at_proportion = 0.86;
 
-face_air_vent_width = 2;
+face_air_vent_angle = 60;
+face_air_vent_exposure_buffer_proportion = 0.95;
+face_air_vent_width = width_thickness * face_air_vent_exposure_buffer_proportion * (sin(face_air_vent_angle));
 face_air_vent_spacing = 5;
 face_air_vent_side_padding = 18;
 face_air_vent_height_crop_factor = 0.8;
-face_air_vent_hollow_thickness = (outer_depth - inner_depth) * 2;
-face_air_vent_angle = 60;
+face_air_vent_hollow_thickness = depth_thickness * 4;
 
 outer_width_ratio = 2.27;
 outer_depth_ratio = 1.13;
@@ -113,7 +117,6 @@ module inner_housing() {
         total_padding = inner_depth - (num_vents * iteration_depth) + face_air_vent_spacing - 2 * face_air_vent_side_padding; // There are n-1 spacings for n vents
         
         vent_width = face_air_vent_width + tan(face_air_vent_angle) * face_air_vent_width;
-        width_thickness = (outer_width - inner_width) / 2;
         for (i = [-inner_depth / 2 + face_air_vent_side_padding:iteration_depth:inner_depth / 2 - iteration_depth - face_air_vent_side_padding]) {
             translate([0, total_padding / 2, (inner_height * air_vent_cutoff_at_proportion)/2 + face_airvent_height_offset/2]) {
                 x_spacing = inner_width / 2 + width_thickness / 2;
