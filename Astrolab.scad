@@ -22,7 +22,7 @@ face_air_vent_exposure_buffer_proportion = 0.95;
 face_air_vent_width = width_thickness * face_air_vent_exposure_buffer_proportion * (sin(face_air_vent_angle));
 face_air_vent_spacing = 5;
 face_air_vent_side_padding = 16;
-face_air_vent_height_crop_factor = 0.8;
+face_air_vent_height_crop_factor = 0.82;
 face_air_vent_hollow_thickness = depth_thickness * 4;
 
 outer_width_ratio = 2.27;
@@ -30,7 +30,7 @@ outer_depth_ratio = 1.13;
 outer_cutout_degrees = 7.5;
 
 text_height_offset = 50;
-face_airvent_height_offset = text_height_offset + 30;
+face_airvent_height_offset = text_height_offset + 36;
 
 module generate_spheric_parabola(width, depth, height) {
     intersection() {
