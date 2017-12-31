@@ -227,16 +227,16 @@ branding();
 // Raspberry Pi Mounting //
 ///////////////////////////
 pi_drop_angle = 10;
-pi_clip_thickness = 1;
+pi_clip_thickness = 2;
 pi_clip_width = 3;
-pi_clip_length = 10 + pi_clip_thickness / tan(pi_drop_angle);
+pi_clip_length = 25 + pi_clip_thickness / tan(pi_drop_angle);
 clip_positions = [0, 20, 38, 51 + pi_clip_width];
 
 pi_reserved_width = 89;
 pi_reserved_depth = 20;
 pi_reserved_height = 88 + 10;
 
-pi_vertical_offset = inner_case_ground_clearance - pi_clip_thickness / tan(pi_drop_angle) + 1;
+pi_vertical_offset = inner_case_ground_clearance - 5;
 pi_horizontal_offset = 12;
 
 module mock_pi() {
