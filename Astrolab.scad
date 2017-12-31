@@ -226,17 +226,18 @@ branding();
 ///////////////////////////
 // Raspberry Pi Mounting //
 ///////////////////////////
-pi_drop_angle = 10;
+pi_drop_angle = 30;
 pi_clip_thickness = 2;
 pi_clip_width = 3;
-pi_clip_length = 25 + pi_clip_thickness / tan(pi_drop_angle);
+pi_clip_length = 16;
+pi_clip_recess = 4; // Space between top of pi board and the Astrolab. Be sure to include any backing material.
 clip_positions = [0, 20, 38, 51 + pi_clip_width];
 
 pi_reserved_width = 89;
 pi_reserved_depth = 20;
 pi_reserved_height = 88 + 10;
 
-pi_vertical_offset = inner_case_ground_clearance - 5;
+pi_vertical_offset = inner_case_ground_clearance - 4;
 pi_horizontal_offset = 9;
 
 module mock_pi() {
@@ -245,12 +246,30 @@ module mock_pi() {
 }
 
 module single_pi_clip() {
+    bent_length = pi_clip_recess / sin(pi_drop_angle) + pi_clip_thickness / tan(pi_drop_angle);
+    bent_height = bent_length * cos (pi_drop_angle);
+    
     rotate([0, pi_drop_angle, 0]) {
+        cube(size = [pi_clip_thickness, pi_clip_width, bent_length], center = false);
+        translate([pi_clip_thickness / 2, pi_clip_width, bent_length])
+            rotate([90, 0, 0])
+                cylinder(h = pi_clip_width, d = pi_clip_thickness, center = false);
+    }
+    
+    translate([pi_clip_recess + pi_clip_thickness * cos(pi_drop_angle), 0, bent_height]) {
+        // Straight clip
         cube(size = [pi_clip_thickness, pi_clip_width, pi_clip_length], center = false);
+        
+        // Lower cylinder on straight clip
+        translate([pi_clip_thickness / 2, pi_clip_width, 0])
+            rotate([90, 0, 0])
+                cylinder(h = pi_clip_width, d = pi_clip_thickness, center = false);
+        // Upper cylinder on straight clip
         translate([pi_clip_thickness / 2, pi_clip_width, pi_clip_length])
             rotate([90, 0, 0])
                 cylinder(h = pi_clip_width, d = pi_clip_thickness, center = false);
     }
+    
 }
 
 module pi_clips() {
