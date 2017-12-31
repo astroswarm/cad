@@ -15,8 +15,8 @@ outer_width = inner_width + 2 * width_thickness;
 outer_depth = inner_depth + 2 * depth_thickness;
 outer_height = inner_height + 2 * height_thickness;
 
-inner_case_ground_clearance = 40;
-air_vent_lower_clearance = -25;
+inner_case_ground_clearance = 44;
+air_vent_lower_clearance = -30;
 
 side_air_vent_width = 6;
 side_air_vent_spacing = 4;
@@ -64,7 +64,7 @@ module inner_housing() {
     }
     
     module shell_bottom_rounded_cutout() {
-        scale([inner_width, inner_depth / 2, inner_case_ground_clearance])
+        scale([inner_width, inner_depth / 2.2, inner_case_ground_clearance])
             sphere(r = 1, center = true, $fn = 60 * print_quality);
     }
     
