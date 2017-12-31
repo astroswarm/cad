@@ -3,8 +3,8 @@ $fn = 50;
 // Quality: 0.3 for development, 1.0 for production
 print_quality = 0.3;
 
-inner_width = 42;
-inner_depth = 130;
+inner_width = 32;
+inner_depth = 124;
 inner_height = 205;
 
 width_thickness = 3;
@@ -31,11 +31,11 @@ face_air_vent_height_crop_factor = 0.82;
 face_air_vent_drop_angle = 60; // downward slope for water to drip out
 face_air_vent_hollow_thickness = depth_thickness * 4;
 
-outer_width_ratio = 2.27;
+outer_width_ratio = 2.75;
 outer_depth_ratio = 1.13;
-outer_cutout_diameter = 3 * outer_height;
-outer_cutout_vertical_offset = outer_height - 100;
-outer_cutout_horizontal_offset = outer_width / 2 + 10;
+outer_cutout_diameter = 2 * outer_height;
+outer_cutout_vertical_offset = outer_height - 112;
+outer_cutout_horizontal_offset = outer_width / 2 + 6;
 
 text_height_offset = 40;
 face_airvent_height_offset = text_height_offset + 22;
@@ -237,7 +237,7 @@ pi_reserved_depth = 20;
 pi_reserved_height = 88 + 10;
 
 pi_vertical_offset = inner_case_ground_clearance - 5;
-pi_horizontal_offset = 12;
+pi_horizontal_offset = 9;
 
 module mock_pi() {
     color("blue")
