@@ -1,5 +1,8 @@
 $fn = 50;
 
+// Quality: 0.3 for development, 1.0 for production
+print_quality = 0.3;
+
 inner_width = 42;
 inner_depth = 130;
 inner_height = 205;
@@ -43,7 +46,7 @@ branding_protrusion = 2;
 module generate_spheric_parabola(width, depth, height) {
     intersection() {
         scale([width, depth/2, height])
-            sphere(r = 1, center = true, $fn = 100);
+            sphere(r = 1, center = true, $fn = 100 * print_quality);
         
         translate([-width/2,-depth/2, 0])
             cube(
@@ -62,7 +65,7 @@ module inner_housing() {
     
     module shell_bottom_rounded_cutout() {
         scale([inner_width, inner_depth / 2, inner_case_ground_clearance])
-            sphere(r = 1, center = true, $fn = 60);
+            sphere(r = 1, center = true, $fn = 60 * print_quality);
     }
     
     module vertical_side_air_vent() {
@@ -168,7 +171,7 @@ module outer_housing() {
                 cylinder(
                     h = cylinder_length,
                     d = outer_cutout_diameter,
-                    $fn = 200
+                    $fn = 200 * print_quality
                 );
                 translate([-outer_cutout_diameter / 2, 0, 0])
                     cube([outer_cutout_diameter, outer_cutout_diameter, cylinder_length]);
@@ -179,7 +182,7 @@ module outer_housing() {
                 cylinder(
                     h = cylinder_length,
                     d = outer_cutout_diameter,
-                    $fn = 200
+                    $fn = 200 * print_quality
                 );
                 translate([-outer_cutout_diameter / 2, 0, 0])
                     cube([outer_cutout_diameter, outer_cutout_diameter, cylinder_length]);
