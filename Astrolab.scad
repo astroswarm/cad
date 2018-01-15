@@ -5,7 +5,7 @@ print_quality = 0.3;
 
 inner_width = 29;
 inner_depth = 124;
-inner_height = 195;
+inner_height = 193;
 
 width_thickness = 3;
 depth_thickness = 3;
@@ -256,7 +256,7 @@ branding();
 ///////////////////////////
 // Raspberry Pi Mounting //
 ///////////////////////////
-pi_drop_angle = 30;
+pi_drop_angle = 50;
 pi_clip_thickness = 2;
 pi_clip_width = 3;
 pi_clip_length = 16;
@@ -275,6 +275,7 @@ module mock_pi() {
     cube(size = [pi_reserved_depth, pi_reserved_width, pi_reserved_height], center = false);
 }
 
+// Todo: Create an enlarged sphere at clip bend merging straight and bent portion smoothly.
 module single_pi_clip() {
     bent_length = pi_clip_recess / sin(pi_drop_angle) + pi_clip_thickness / tan(pi_drop_angle);
     bent_height = bent_length * cos (pi_drop_angle);
