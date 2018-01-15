@@ -22,13 +22,13 @@ side_air_vent_width = 6;
 side_air_vent_spacing = 4;
 air_vent_cutoff_at_proportion = 0.86;
 
-face_air_vent_angle = 60;
+face_air_vent_angle = 70;
 face_air_vent_exposure_buffer_proportion = 0.9;
 face_air_vent_width = width_thickness * face_air_vent_exposure_buffer_proportion * (sin(face_air_vent_angle));
-face_air_vent_spacing = 5;
+face_air_vent_spacing = 6;
 face_air_vent_side_padding = 18;
 face_air_vent_height_crop_factor = 0.80;
-face_air_vent_drop_angle = 60; // downward slope for water to drip out
+face_air_vent_drop_angle = 50; // downward slope for water to drip out
 face_air_vent_hollow_thickness = depth_thickness * 4;
 
 outer_width_ratio = 2.75;
