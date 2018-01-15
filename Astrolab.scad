@@ -15,7 +15,7 @@ outer_width = inner_width + 2 * width_thickness;
 outer_depth = inner_depth + 2 * depth_thickness;
 outer_height = inner_height + 2 * height_thickness;
 
-inner_case_ground_clearance = 44;
+inner_case_ground_clearance = 45;
 air_vent_lower_clearance = -30;
 
 side_air_vent_width = 6;
@@ -37,8 +37,8 @@ outer_cutout_diameter = 2 * outer_height;
 outer_cutout_vertical_offset = outer_height - 112;
 outer_cutout_horizontal_offset = outer_width / 2 + 6;
 
-text_height_offset = 40;
-face_airvent_height_offset = text_height_offset + 22;
+text_height_offset = 42;
+face_airvent_height_offset = 62;
 
 branding_height = 13;
 branding_protrusion = 2;
@@ -66,7 +66,7 @@ module inner_housing() {
     }
     
     module shell_bottom_rounded_cutout() {
-        scale([inner_width, inner_depth / 2.2, inner_case_ground_clearance])
+        scale([inner_width, inner_depth / 2.25, inner_case_ground_clearance])
             sphere(r = 1, center = true, $fn = 60 * print_quality);
     }
     
