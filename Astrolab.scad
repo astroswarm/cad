@@ -1,7 +1,7 @@
 $fn = 50;
 
 // Quality: 0.3 for development, 1.0 for production
-print_quality = 0.3;
+print_quality = 1.0;
 
 inner_width = 29;
 inner_depth = 122;
@@ -250,7 +250,7 @@ module housings_joint() {
 
 inner_housing();
 outer_housing();
-housings_joint();
+//housings_joint();
 branding();
 
 ///////////////////////////
