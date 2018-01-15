@@ -5,7 +5,7 @@ print_quality = 0.3;
 
 inner_width = 29;
 inner_depth = 124;
-inner_height = 205;
+inner_height = 195;
 
 width_thickness = 3;
 depth_thickness = 3;
