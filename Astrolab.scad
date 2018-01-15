@@ -4,7 +4,7 @@ $fn = 50;
 print_quality = 0.3;
 
 inner_width = 29;
-inner_depth = 124;
+inner_depth = 122;
 inner_height = 193;
 
 width_thickness = 3;
