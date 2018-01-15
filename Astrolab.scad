@@ -15,20 +15,20 @@ outer_width = inner_width + 2 * width_thickness;
 outer_depth = inner_depth + 2 * depth_thickness;
 outer_height = inner_height + 2 * height_thickness;
 
-inner_case_ground_clearance = 45;
+inner_case_ground_clearance = 44;
 air_vent_lower_clearance = -30;
 
 side_air_vent_width = 6;
 side_air_vent_spacing = 4;
 air_vent_cutoff_at_proportion = 0.86;
 
-face_air_vent_angle = 60;
+face_air_vent_angle = 70;
 face_air_vent_width = width_thickness * (sin(face_air_vent_angle));
-face_air_vent_spacing = 5;
+face_air_vent_spacing = 7;
 face_air_vent_side_padding = 18;
 face_air_vent_height_crop_factor = 0.80;
 face_air_vent_drop_angle = 50; // downward slope for water to drip out
-face_air_vent_hollow_thickness = depth_thickness * 4;
+face_air_vent_hollow_thickness = depth_thickness * 6;
 
 outer_width_ratio = 2.75;
 outer_depth_ratio = 1.10;
@@ -36,7 +36,7 @@ outer_cutout_diameter = 2 * outer_height;
 outer_cutout_vertical_offset = outer_height - 112;
 outer_cutout_horizontal_offset = outer_width / 2 + 6;
 
-text_height_offset = 43;
+text_height_offset = 40;
 face_airvent_height_offset = 62;
 
 branding_height = 13;
@@ -65,7 +65,7 @@ module inner_housing() {
     }
     
     module shell_bottom_rounded_cutout() {
-        scale([inner_width, inner_depth / 2.25, inner_case_ground_clearance])
+        scale([inner_width, inner_depth / 2.2, inner_case_ground_clearance])
             sphere(r = 1, center = true, $fn = 60 * print_quality);
     }
     
