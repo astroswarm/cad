@@ -32,7 +32,7 @@ face_air_vent_drop_angle = 60; // downward slope for water to drip out
 face_air_vent_hollow_thickness = depth_thickness * 4;
 
 outer_width_ratio = 2.75;
-outer_depth_ratio = 1.13;
+outer_depth_ratio = 1.10;
 outer_cutout_diameter = 2 * outer_height;
 outer_cutout_vertical_offset = outer_height - 112;
 outer_cutout_horizontal_offset = outer_width / 2 + 6;
@@ -42,6 +42,8 @@ face_airvent_height_offset = text_height_offset + 22;
 
 branding_height = 13;
 branding_protrusion = 2;
+
+lower_joint_height = 2;
 
 module generate_spheric_parabola(width, depth, height) {
     intersection() {
@@ -218,9 +220,37 @@ module branding() {
             generate_3d_text();
 }
 
+module housings_joint() {
+    block_width = outer_width * outer_width_ratio;
+    block_depth = outer_depth * outer_depth_ratio;
+    
+    
+    difference() {
+        // Solid base
+        /*intersection() {
+            generate_spheric_parabola(block_width, block_depth, outer_height);
+                    translate([-outer_width / 2, -block_depth / 2, 0])
+            cube(
+                size = [outer_width, block_depth, outer_height]
+            );
+        }*/
+        // Curved base
+        generate_spheric_parabola(outer_width, block_depth, outer_height);
+        
+        generate_spheric_parabola(outer_width, outer_depth, outer_height);
+        
+        translate([-block_width / 2, -block_depth / 2, lower_joint_height])
+            cube(
+                size = [block_width, block_depth, outer_height]
+            );
+    }
+
+}
+
 
 inner_housing();
 outer_housing();
+housings_joint();
 branding();
 
 ///////////////////////////
