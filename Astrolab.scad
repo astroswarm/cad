@@ -3,7 +3,7 @@ $fn = 50;
 // Quality: 0.3 for development, 1.0 for production
 print_quality = 0.3;
 
-inner_width = 32;
+inner_width = 29;
 inner_depth = 124;
 inner_height = 205;
 
