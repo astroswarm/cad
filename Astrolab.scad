@@ -42,7 +42,8 @@ face_airvent_height_offset = 62;
 branding_height = 13;
 branding_protrusion = 2;
 
-lower_joint_height = 2;
+lower_joint_height = inner_case_ground_clearance + air_vent_lower_clearance - side_air_vent_width / 2;
+lower_joint_width = 6;
 
 module generate_spheric_parabola(width, depth, height) {
     intersection() {
@@ -234,7 +235,7 @@ module housings_joint() {
             );
         }*/
         // Curved base
-        generate_spheric_parabola(outer_width, block_depth, outer_height);
+        generate_spheric_parabola(lower_joint_width, block_depth, outer_height);
         
         generate_spheric_parabola(outer_width, outer_depth, outer_height);
         
@@ -249,7 +250,7 @@ module housings_joint() {
 
 inner_housing();
 outer_housing();
-//housings_joint();
+housings_joint();
 branding();
 
 ///////////////////////////
