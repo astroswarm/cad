@@ -4,7 +4,7 @@ $fn = 50;
 print_quality = 1.0;
 
 inner_width = 29;
-inner_depth = 122;
+inner_depth = 104;
 inner_height = 193;
 
 width_thickness = 3;
@@ -268,7 +268,7 @@ pi_reserved_depth = 20;
 pi_reserved_height = 88 + 10;
 
 pi_vertical_offset = inner_case_ground_clearance - 4;
-pi_horizontal_offset = 9;
+pi_horizontal_offset = 0;
 
 module mock_pi() {
     color("blue")
