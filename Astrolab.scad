@@ -1,7 +1,7 @@
 $fn = 50;
 
 // Quality: 0.3 for development, 1.0 for production
-print_quality = 1.0;
+print_quality = 0.2;
 
 inner_width = 29;
 inner_depth = 104;
@@ -247,12 +247,6 @@ module housings_joint() {
 
 }
 
-
-inner_housing();
-outer_housing();
-housings_joint();
-branding();
-
 ///////////////////////////
 // Raspberry Pi Mounting //
 ///////////////////////////
@@ -263,9 +257,9 @@ pi_clip_length = 16;
 pi_clip_recess = 4; // Space between top of pi board and the Astrolab. Be sure to include any backing material.
 clip_positions = [0, 20, 38, 51 + pi_clip_width];
 
-pi_reserved_width = 89;
-pi_reserved_depth = 20;
-pi_reserved_height = 88 + 10;
+pi_reserved_width = 56;
+pi_reserved_depth = 25;
+pi_reserved_height = 88 + pi_clip_length;
 
 pi_vertical_offset = inner_case_ground_clearance - 4;
 pi_horizontal_offset = 0;
@@ -315,11 +309,43 @@ module pi_clips() {
             }
         }
         
-        translate([-inner_width / 2, -pi_reserved_width / 2,  pi_clip_thickness / tan(pi_drop_angle)])
-            rotate([0, pi_drop_angle, 0]) {
-                //mock_pi(); // Uncomment to see spatial footprint for a Raspberry pi
-            }
+        translate([-inner_width / 2, -pi_reserved_width / 2,  pi_clip_thickness / tan(pi_drop_angle)]) {
+            //mock_pi(); // Uncomment to see spatial footprint for a Raspberry pi
+        }
     }
 }
 
-pi_clips();
+power_x_offset = 6;
+power_z_offset = 76 + pi_vertical_offset + pi_clip_thickness / tan(pi_drop_angle);
+power_plug_width = 10;
+power_plug_height = 7;
+
+module pi_power_opening() {
+
+    
+    translate([-inner_width / 2 + power_x_offset, 0, power_z_offset])
+        rotate([90, 0, 0])
+            scale([1, 1.4, 1])
+                cylinder(h = outer_depth / 2, d = power_plug_width);
+}
+
+module simulate_pi_power_plug() {
+    color("blue")
+    translate([-inner_width / 2 + power_x_offset, -inner_depth / 2, power_z_offset])
+        rotate([90, 0, 0])
+            cube([power_plug_height, power_plug_width, inner_depth / 2], center = true);
+}
+
+difference() {
+    union() {
+        inner_housing();
+        outer_housing();
+        housings_joint();
+        branding();
+        pi_clips();
+    }
+    
+    pi_power_opening();
+}
+
+//simulate_pi_power_plug();
