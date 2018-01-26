@@ -1,7 +1,7 @@
 $fn = 50;
 
 // Quality: 0.3 for development, 1.0 for production
-print_quality = 1.0;
+print_quality = 0.2;
 
 inner_width = 29;
 inner_depth = 104;
@@ -311,7 +311,7 @@ module pi_clips() {
         }
         
         translate([-inner_width / 2, -pi_reserved_width / 2,  pi_clip_thickness / tan(pi_drop_angle)]) {
-            //mock_pi(); // Uncomment to see spatial footprint for a Raspberry pi
+            mock_pi(); // Uncomment to see spatial footprint for a Raspberry pi
         }
     }
 }
@@ -321,12 +321,15 @@ power_z_offset = 76 + pi_vertical_offset + pi_clip_thickness / tan(pi_drop_angle
 power_plug_width = 10;
 power_plug_height = 7;
 
-module pi_power_opening() {
+power_plug_width_factor = power_plug_width / power_plug_height;
+power_cord_diameter = 4;
+power_cord_compression = 0.25;
+power_cap_scale_factor = 0.95;
 
-    
+module pi_power_opening() {
     translate([-inner_width / 2 + power_x_offset, 0, power_z_offset])
         rotate([90, 0, 0])
-            scale([1, 1.4, 1])
+            scale([1, power_plug_width_factor, 1])
                 cylinder(h = outer_depth / 2, d = power_plug_width);
 }
 
@@ -337,16 +340,46 @@ module simulate_pi_power_plug() {
             cube([power_plug_height, power_plug_width, inner_depth / 2], center = true);
 }
 
-difference() {
-    union() {
-        inner_housing();
-        outer_housing();
-        housings_joint();
-        branding();
-        pi_clips();
+module power_cap() {
+    difference() {
+        // Main area
+        scale([power_cap_scale_factor, 1, power_cap_scale_factor])
+        translate([
+            power_plug_height / 2 + power_plug_width / 2,
+            45,
+            -power_z_offset + power_plug_width * power_plug_width_factor / 2
+        ])
+            intersection() {
+                outer_housing();
+                pi_power_opening();
+            }
+        
+        // Power cord hole
+        translate([0, outer_depth / 2, power_cord_diameter / 2 - power_cord_compression])
+            rotate([90, 0, 0])
+                cylinder(h = outer_depth, d = power_cord_diameter);
     }
-    
-    pi_power_opening();
 }
 
-//simulate_pi_power_plug();
+module build_structure() {
+    difference() {
+        union() {
+            inner_housing();
+            outer_housing();
+            housings_joint();
+            branding();
+            pi_clips();
+        }
+        
+        pi_power_opening();
+    }
+
+    //simulate_pi_power_plug();
+}
+
+module build_cap() {
+    power_cap();
+}
+
+//build_structure();
+build_cap();
