@@ -316,8 +316,8 @@ module pi_clips() {
     }
 }
 
-power_x_offset = 6;
-power_z_offset = 76 + pi_vertical_offset + pi_clip_thickness / tan(pi_drop_angle);
+power_x_offset = 7;
+power_z_offset = 76 + pi_vertical_offset + pi_clip_thickness / tan(pi_drop_angle) + 4;
 power_plug_width = 10;
 power_plug_height = 7;
 
