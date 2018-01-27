@@ -1,15 +1,15 @@
 $fn = 50;
 
 // Quality: 0.3 for development, 1.0 for production
-print_quality = 0.2;
+print_quality = 0.3;
 
 inner_width = 29;
 inner_depth = 104;
-inner_height = 193;
+inner_height = 182;
 
-width_thickness = 3;
-depth_thickness = 3;
-height_thickness = 3;
+width_thickness = 2;
+depth_thickness = 2;
+height_thickness = 2;
 
 outer_width = inner_width + 2 * width_thickness;
 outer_depth = inner_depth + 2 * depth_thickness;
@@ -22,10 +22,10 @@ side_air_vent_width = 6;
 side_air_vent_spacing = 4;
 air_vent_cutoff_at_proportion = 0.86;
 
-face_air_vent_angle = 60;
+face_air_vent_angle = 70;
 // Calculate air vent width to be exactly blocking any head-on (90 degree) debris
 face_air_vent_width = width_thickness * sin(face_air_vent_angle);
-face_air_vent_spacing = 9;
+face_air_vent_spacing = 10;
 face_air_vent_side_padding = 18;
 face_air_vent_height_crop_factor = 0.80;
 face_air_vent_drop_angle = 50; // downward slope for water to drip out
@@ -45,6 +45,9 @@ branding_protrusion = 2;
 
 lower_joint_height = inner_case_ground_clearance + air_vent_lower_clearance - side_air_vent_width / 2;
 lower_joint_width = 6;
+
+lower_cutout_depth_ratio = 0.38;
+lower_cutout_z_offset = -6;
 
 module generate_spheric_parabola(width, depth, height) {
     intersection() {
@@ -67,8 +70,9 @@ module inner_housing() {
     }
     
     module shell_bottom_rounded_cutout() {
-        scale([inner_width, inner_depth / 2.2, inner_case_ground_clearance])
-            sphere(r = 1, center = true, $fn = 60 * print_quality);
+        translate([0, 0, lower_cutout_z_offset])
+            scale([inner_width, lower_cutout_depth_ratio * inner_depth, inner_case_ground_clearance])
+                sphere(r = 1, center = true, $fn = 60 * print_quality);
     }
     
     module vertical_side_air_vent() {
@@ -262,7 +266,7 @@ pi_reserved_width = 56;
 pi_reserved_depth = 25;
 pi_reserved_height = 88 + pi_clip_length;
 
-pi_vertical_offset = inner_case_ground_clearance - 4;
+pi_vertical_offset = inner_case_ground_clearance - 4 + lower_cutout_z_offset;
 pi_horizontal_offset = 0;
 
 module mock_pi() {
@@ -311,7 +315,7 @@ module pi_clips() {
         }
         
         translate([-inner_width / 2, -pi_reserved_width / 2,  pi_clip_thickness / tan(pi_drop_angle)]) {
-            mock_pi(); // Uncomment to see spatial footprint for a Raspberry pi
+            //mock_pi(); // Uncomment to see spatial footprint for a Raspberry pi
         }
     }
 }
