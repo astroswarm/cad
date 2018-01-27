@@ -341,6 +341,7 @@ module simulate_pi_power_plug() {
 }
 
 module power_cap() {
+    translate([outer_depth / 2, 0, 0])
     difference() {
         // Main area
         scale([power_cap_scale_factor, 1, power_cap_scale_factor])
@@ -381,5 +382,5 @@ module build_cap() {
     power_cap();
 }
 
-//build_structure();
+build_structure();
 build_cap();
