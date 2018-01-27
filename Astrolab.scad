@@ -252,7 +252,7 @@ module housings_joint() {
 // Raspberry Pi Mounting //
 ///////////////////////////
 pi_drop_angle = 50;
-pi_clip_thickness = 3;
+pi_clip_thickness = 2;
 pi_clip_width = 3;
 pi_clip_length = 16;
 pi_clip_recess = 4; // Space between top of pi board and the Astrolab. Be sure to include any backing material.
