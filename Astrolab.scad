@@ -345,7 +345,7 @@ module power_cap() {
         // Main area
         scale([power_cap_scale_factor, 1, power_cap_scale_factor])
         translate([
-            power_plug_height / 2 + power_plug_width / 2,
+            inner_width / 2 - power_x_offset,
             45,
             -power_z_offset + power_plug_width * power_plug_width_factor / 2
         ])
