@@ -41,6 +41,7 @@ text_height_offset = 40;
 face_airvent_height_offset = 62;
 
 branding_height = 13;
+branding_min_protrusion = 0.25;
 branding_protrusion = 2;
 
 lower_joint_height = inner_case_ground_clearance + air_vent_lower_clearance - side_air_vent_width / 2;
@@ -215,12 +216,13 @@ module branding() {
                 halign = "center"
             );
     }
-    branding_angle = atan(branding_protrusion / branding_height) + 90;
+    total_protrusion = branding_protrusion - branding_min_protrusion;
+    branding_angle = atan(total_protrusion / branding_height) + 90;
 
-    translate([outer_width/2 - branding_protrusion * sin(branding_angle), 0, text_height_offset])
+    translate([outer_width/2 - total_protrusion * sin(branding_angle), 0, text_height_offset])
         rotate([branding_angle, 0, 90])
             generate_3d_text();
-    translate([-outer_width/2 + branding_protrusion * sin(branding_angle), 0, text_height_offset])
+    translate([-outer_width/2 + total_protrusion * sin(branding_angle), 0, text_height_offset])
         rotate([branding_angle, 0, 270])
             generate_3d_text();
 }
@@ -382,9 +384,4 @@ module build_structure() {
     //simulate_pi_power_plug();
 }
 
-module build_cap() {
-    power_cap();
-}
-
 build_structure();
-build_cap();
