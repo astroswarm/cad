@@ -324,8 +324,8 @@ module pi_clips() {
 
 power_x_offset = 7;
 power_z_offset = 76 + pi_vertical_offset + pi_clip_thickness / tan(pi_drop_angle) + 4;
-power_plug_width = 10;
-power_plug_height = 7;
+power_plug_width = 12;
+power_plug_height = 9;
 
 power_plug_width_factor = power_plug_width / power_plug_height;
 power_cord_diameter = 4;

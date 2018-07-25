@@ -2,8 +2,8 @@ $fn = 100;
 
 plug_hole_scale_factor = 0.95; // How much smaller than the opening should our part be?
 
-plug_width = 10 * plug_hole_scale_factor;
-plug_height = 7 * plug_hole_scale_factor;
+plug_width = 12 * plug_hole_scale_factor;
+plug_height = 9 * plug_hole_scale_factor;
 plug_ratio = plug_width / plug_height;
 
 plug_cord_diameter = 3;
