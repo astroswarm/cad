@@ -1,6 +1,6 @@
 $fn = 50;
 
-// Quality: 0.3 for development, 1.0 for production
+// Quality: 0.3 for development, 3.0 for production
 print_quality = 1.0;
 
 inner_width = 29;
@@ -73,7 +73,7 @@ module inner_housing() {
     module shell_bottom_rounded_cutout() {
         translate([0, 0, lower_cutout_z_offset])
             scale([inner_width, lower_cutout_depth_ratio * inner_depth, inner_case_ground_clearance])
-                sphere(r = 1, center = true, $fn = 60 * print_quality);
+                sphere(r = 1, center = true, $fn = 50 * print_quality);
     }
     
     module vertical_side_air_vent() {
@@ -85,11 +85,11 @@ module inner_housing() {
         translate([curve_radius, 0, 0]) {
             // Rounded bottom
             rotate([-90, 0, 0])
-                cylinder(h = outer_depth, r = curve_radius);
+                cylinder(h = outer_depth, r = curve_radius, $fn = 30 * print_quality);
             // Rounded top
             translate([0, 0, inner_height * air_vent_cutoff_at_proportion - inner_case_ground_clearance - air_vent_lower_clearance])
                 rotate([-90, 0, 0])
-                    cylinder(h = outer_depth, r = curve_radius);
+                    cylinder(h = outer_depth, r = curve_radius, $fn = 30 * print_quality);
         }
     }
     
@@ -119,7 +119,7 @@ module inner_housing() {
             translate([0, curve_radius, 0]) {
                 // Rounded bottom
                 rotate([0, 90 + face_air_vent_drop_angle, 0]) {
-                    cylinder(h = face_air_vent_hollow_thickness * 1/cos(face_air_vent_drop_angle), r = curve_radius);
+                    cylinder(h = face_air_vent_hollow_thickness * 1/cos(face_air_vent_drop_angle), r = curve_radius, $fn = 30 * print_quality);
                     translate([0, face_air_vent_width / 2, 0])
                         rotate([0, 0, 180])
                             cube(size = [
@@ -131,7 +131,7 @@ module inner_housing() {
                 // Rounded top
                 translate([0, 0, inner_height * air_vent_cutoff_at_proportion - face_airvent_height_offset])
                     rotate([0, 90, 0])
-                        cylinder(h = face_air_vent_hollow_thickness, r = curve_radius);
+                        cylinder(h = face_air_vent_hollow_thickness, r = curve_radius, $fn = 30 * print_quality);
             }
         }
         
@@ -179,7 +179,7 @@ module outer_housing() {
                 cylinder(
                     h = cylinder_length,
                     d = outer_cutout_diameter,
-                    $fn = 200 * print_quality
+                    $fn = 150 * print_quality
                 );
                 translate([-outer_cutout_diameter / 2, 0, 0])
                     cube([outer_cutout_diameter, outer_cutout_diameter, cylinder_length]);
@@ -190,7 +190,7 @@ module outer_housing() {
                 cylinder(
                     h = cylinder_length,
                     d = outer_cutout_diameter,
-                    $fn = 200 * print_quality
+                    $fn = 150 * print_quality
                 );
                 translate([-outer_cutout_diameter / 2, 0, 0])
                     cube([outer_cutout_diameter, outer_cutout_diameter, cylinder_length]);
@@ -208,7 +208,7 @@ module outer_housing() {
 
 module branding() {
     module generate_3d_text() {
-        linear_extrude(height = branding_protrusion)
+        linear_extrude(height = branding_protrusion, $fn = 10 * print_quality)
             text(
                 font = "Arial Rounded MT Bold",
                 text = "Astrolab",
@@ -285,7 +285,7 @@ module single_pi_clip() {
         cube(size = [pi_clip_thickness, pi_clip_width, bent_length], center = false);
         translate([pi_clip_thickness / 2, pi_clip_width, bent_length])
             rotate([90, 0, 0])
-                cylinder(h = pi_clip_width, d = pi_clip_thickness, center = false);
+                cylinder(h = pi_clip_width, d = pi_clip_thickness, center = false, $fn = 30 * print_quality);
     }
     
     translate([pi_clip_recess + pi_clip_thickness * cos(pi_drop_angle), 0, bent_height]) {
@@ -295,11 +295,11 @@ module single_pi_clip() {
         // Lower cylinder on straight clip
         translate([pi_clip_thickness / 2, pi_clip_width, 0])
             rotate([90, 0, 0])
-                cylinder(h = pi_clip_width, d = pi_clip_thickness, center = false);
+                cylinder(h = pi_clip_width, d = pi_clip_thickness, center = false, $fn = 30 * print_quality);
         // Upper cylinder on straight clip
         translate([pi_clip_thickness / 2, pi_clip_width, pi_clip_length])
             rotate([90, 0, 0])
-                cylinder(h = pi_clip_width, d = pi_clip_thickness, center = false);
+                cylinder(h = pi_clip_width, d = pi_clip_thickness, center = false, $fn = 30 * print_quality);
     }
     
 }
@@ -336,7 +336,7 @@ module pi_power_opening() {
     translate([-inner_width / 2 + power_x_offset, 0, power_z_offset])
         rotate([90, 0, 0])
             scale([1, power_plug_width_factor, 1])
-                cylinder(h = outer_depth / 2, d = power_plug_width);
+                cylinder(h = outer_depth / 2, d = power_plug_width, $fn = 40 * print_quality);
 }
 
 module simulate_pi_power_plug() {
