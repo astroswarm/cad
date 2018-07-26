@@ -37,7 +37,7 @@ outer_cutout_diameter = 2 * outer_height;
 outer_cutout_vertical_offset = outer_height - 112;
 outer_cutout_horizontal_offset = outer_width / 2 + 6;
 
-text_height_offset = 40;
+text_height_offset = 39;
 face_airvent_height_offset = 62;
 
 branding_height = 13;
@@ -47,8 +47,8 @@ branding_protrusion = 2;
 lower_joint_height = inner_case_ground_clearance + air_vent_lower_clearance - side_air_vent_width / 2;
 lower_joint_width = 6;
 
-lower_cutout_depth_ratio = 0.38;
-lower_cutout_z_offset = -6;
+lower_cutout_depth_ratio = 0.40;
+lower_cutout_z_offset = -8;
 
 module generate_spheric_parabola(width, depth, height) {
     intersection() {
