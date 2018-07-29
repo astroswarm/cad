@@ -1,7 +1,7 @@
 $fn = 50;
 
 // Quality: 0.3 for development, 3.0 for production
-print_quality = 0.3;
+print_quality = 1.0;
 
 inner_width = 29;
 inner_depth = 104;
@@ -17,10 +17,11 @@ outer_height = inner_height + 2 * height_thickness;
 
 inner_case_ground_clearance = 44;
 air_vent_lower_clearance = -30;
+pi_vertical_offset = 34;
 
 side_air_vent_width = 6;
 side_air_vent_spacing = 4;
-side_air_vent_bridges = 4;
+side_air_vent_bridges = 2.9; // 3 bridges, moved slightly upward
 air_vent_cutoff_at_proportion = 0.86;
 
 face_air_vent_angle = 70;
@@ -48,8 +49,8 @@ branding_protrusion = 2;
 lower_joint_height = inner_case_ground_clearance + air_vent_lower_clearance - side_air_vent_width / 2;
 lower_joint_width = 6;
 
-lower_cutout_depth_ratio = 0.40;
-lower_cutout_z_offset = -8;
+lower_cutout_depth_ratio = 0.34;
+lower_cutout_z_offset = -17;
 
 module generate_spheric_parabola(width, depth, height) {
     intersection() {
@@ -73,8 +74,9 @@ module inner_housing() {
     
     module shell_bottom_rounded_cutout() {
         translate([0, 0, lower_cutout_z_offset])
-            scale([inner_width, lower_cutout_depth_ratio * inner_depth, inner_case_ground_clearance])
-                sphere(r = 1, center = true, $fn = 50 * print_quality);
+            scale([outer_width*1.1, lower_cutout_depth_ratio * inner_depth, inner_case_ground_clearance])
+                rotate([0, 90, 0])
+                    cylinder(h = 1, r = 1, $fn = 50 * print_quality, center = true);
     }
     
     module vertical_side_air_vent_bridge() {
@@ -82,10 +84,10 @@ module inner_housing() {
         
         difference() {
             rotate([-90, 0, 0])
-                cylinder(h = outer_depth, r = curve_radius, $fn = 10 * print_quality);
+                cylinder(h = outer_depth, r = curve_radius, $fn = 30 * print_quality);
             translate([0, 0, -curve_radius/2])
                 rotate([-90, 0, 0])
-                    cylinder(h = outer_depth, r = curve_radius, $fn = 10 * print_quality);
+                    cylinder(h = outer_depth, r = curve_radius, $fn = 30 * print_quality);
         }
     }
     
@@ -296,7 +298,6 @@ pi_reserved_width = 56;
 pi_reserved_depth = 25;
 pi_reserved_height = 88 + pi_clip_length;
 
-pi_vertical_offset = inner_case_ground_clearance - 4 + lower_cutout_z_offset;
 pi_horizontal_offset = 0;
 
 module mock_pi() {
