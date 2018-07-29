@@ -25,8 +25,8 @@ side_air_vent_bridges = 2.9; // 3 bridges, moved slightly upward
 air_vent_cutoff_at_proportion = 0.86;
 
 face_air_vent_angle = 70;
-// Calculate air vent width to be exactly blocking any head-on (90 degree) debris. Add a 0.9 multiplier to add a little extra blockage to compensate for print error at thinnest points.
-face_air_vent_width = width_thickness * sin(face_air_vent_angle) * 0.9;
+// Calculate air vent width to be exactly blocking any head-on (90 degree) debris. Add a 0.8 multiplier to add a little extra blockage to compensate for print error at thinnest points.
+face_air_vent_width = width_thickness * sin(face_air_vent_angle) * 0.8;
 face_air_vent_spacing = 10;
 face_air_vent_side_padding = 18;
 face_air_vent_height_crop_factor = 0.80;
