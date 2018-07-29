@@ -29,7 +29,7 @@ face_air_vent_angle = 70;
 face_air_vent_width = width_thickness * sin(face_air_vent_angle) * 0.8;
 face_air_vent_spacing = 10;
 face_air_vent_side_padding = 18;
-face_air_vent_height_crop_factor = 0.80;
+face_air_vent_height_crop_factor = 0.84;
 face_air_vent_drop_angle = 50; // downward slope for water to drip out
 face_air_vent_hollow_thickness = depth_thickness * 6;
 
