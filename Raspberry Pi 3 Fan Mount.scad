@@ -1,5 +1,3 @@
-//import("/Users/robby/Downloads/Raspberry-Pi-3-Fan-Mount-With-Offsets.stl");
-
 $fn = 30;
 
 bracket_depth = 1;
