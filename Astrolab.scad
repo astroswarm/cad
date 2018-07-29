@@ -20,6 +20,7 @@ air_vent_lower_clearance = -30;
 
 side_air_vent_width = 6;
 side_air_vent_spacing = 4;
+side_air_vent_bridges = 4;
 air_vent_cutoff_at_proportion = 0.86;
 
 face_air_vent_angle = 70;
@@ -76,20 +77,46 @@ module inner_housing() {
                 sphere(r = 1, center = true, $fn = 50 * print_quality);
     }
     
+    module vertical_side_air_vent_bridge() {
+        curve_radius = side_air_vent_width / 2;
+        
+        difference() {
+            rotate([-90, 0, 0])
+                cylinder(h = outer_depth, r = curve_radius, $fn = 10 * print_quality);
+            translate([0, 0, -curve_radius/2])
+                rotate([-90, 0, 0])
+                    cylinder(h = outer_depth, r = curve_radius, $fn = 10 * print_quality);
+        }
+    }
+    
     module vertical_side_air_vent() {
         curve_radius = side_air_vent_width / 2;
-        // Vertical portion
-        cube(
-            size = [side_air_vent_width, outer_depth, inner_height * air_vent_cutoff_at_proportion - inner_case_ground_clearance - air_vent_lower_clearance]
-        );
-        translate([curve_radius, 0, 0]) {
-            // Rounded bottom
-            rotate([-90, 0, 0])
-                cylinder(h = outer_depth, r = curve_radius, $fn = 30 * print_quality);
-            // Rounded top
-            translate([0, 0, inner_height * air_vent_cutoff_at_proportion - inner_case_ground_clearance - air_vent_lower_clearance])
-                rotate([-90, 0, 0])
-                    cylinder(h = outer_depth, r = curve_radius, $fn = 30 * print_quality);
+        vent_height = inner_height * air_vent_cutoff_at_proportion - inner_case_ground_clearance - air_vent_lower_clearance;
+        bridge_increment = vent_height / (side_air_vent_bridges + 1);
+        
+        difference() {
+            union() {
+                // Vertical portion
+                cube(
+                    size = [side_air_vent_width, outer_depth, vent_height]
+                );
+                translate([curve_radius, 0, 0]) {
+                    // Rounded bottom
+                    rotate([-90, 0, 0])
+                        cylinder(h = outer_depth, r = curve_radius, $fn = 30 * print_quality);
+                    // Rounded top
+                    translate([0, 0, inner_height * air_vent_cutoff_at_proportion - inner_case_ground_clearance - air_vent_lower_clearance])
+                        rotate([-90, 0, 0])
+                            cylinder(h = outer_depth, r = curve_radius, $fn = 30 * print_quality);
+                }
+            }
+            
+            translate([curve_radius, 0, 0]) {
+                for (i = [bridge_increment:bridge_increment:vent_height]) {
+                    translate([0, 0, i])
+                        vertical_side_air_vent_bridge();
+                }
+            }
         }
     }
     
@@ -156,6 +183,7 @@ module inner_housing() {
             }
         }
     }
+    
     difference() {
         shell_body();
         
