@@ -8,8 +8,8 @@ plug_ratio = plug_width / plug_height;
 
 plug_cord_diameter = 4;
 
-exterior_bracing_overlap = 1.5;
-exterior_bracing_z_thickness = 0.75;
+exterior_bracing_overlap = 2.0;
+exterior_bracing_z_thickness = 1.0;
 
 interior_bracing_overlap = 0.5;
 interior_bracing_z_thickness = 0.75;
