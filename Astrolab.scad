@@ -80,12 +80,12 @@ module inner_housing() {
     }
     
     module vertical_side_air_vent_bridge() {
-        curve_radius = side_air_vent_width / 2;
+        curve_radius = side_air_vent_width;
         
         difference() {
             rotate([-90, 0, 0])
                 cylinder(h = outer_depth, r = curve_radius, $fn = 30 * print_quality);
-            translate([0, 0, -curve_radius/2])
+            translate([0, 0, -curve_radius / 2])
                 rotate([-90, 0, 0])
                     cylinder(h = outer_depth, r = curve_radius, $fn = 30 * print_quality);
         }
